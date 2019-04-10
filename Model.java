@@ -1,6 +1,5 @@
 package mvctypingtest;
 
-
 import java.io.*;
 import java.util.ArrayList;
 import java.util.Scanner;
@@ -8,7 +7,9 @@ import java.util.Scanner;
 public class Model{
     
     private Typist currentUserData;
-    private TypistData  typistList;
+    private TypistData nickList;
+    private TypistData wpmList;
+    private TypistData typistList;
     public String[] textPassage;
     public String[] missedWords;
     public double tempWPM;
@@ -30,7 +31,6 @@ public class Model{
     public void setTypist(String nick){//Stove
         this.currentUserData.setNick(nick);
         this.currentUserData.setWPM((int)tempWPM);
-        typistList.splitAndAddToList(currentUserData);
     }
     
     public void setTextPassage() throws Exception{//Stove
@@ -52,14 +52,22 @@ public class Model{
         return textPassage;
     }
     
-    public double calcWPM(String userInput, int timeChoice){//Stove
-        int time = timeChoice;
+    public double calcWPM(String userInput){//Stove
         double wpm = 0;
+        int time = RadioBttns.getTimeChoice();
+        int words = 0;
+        
+        String[] textPassage = getTextPassage();
+        String[] newTextPassage = textPassage[0].split("\\s+");
         String[] userInputArray = userInput.split("\\s+");
         
-        wpm = (userInputArray.length)/(time/60);
+        for (int i = 0; i < userInputArray.length; i++)
+        {
+            if(userInputArray[i].compareTo(newTextPassage[i]) == 0)
+                words++;
+        }
         
-        tempWPM = wpm;
+        wpm = words/(time/60);
         return wpm;
     }
     
